@@ -43,24 +43,21 @@
 
     <main class="max-w-3xl mx-auto px-4 pb-24">
         <!-- Dashboard / Info -->
-        <div class="mb-8 p-6 bg-white rounded-2xl border-l-8 border-blue-500 shadow-sm">
+        <div class="mb-8 p-6 bg-white rounded-2xl border-l-8 border-orange-500 shadow-sm">
             <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
                 </svg>
-                Guía de Práctica Online
+                Actualización de Datos
             </h2>
             <p class="mt-2 text-slate-600 text-sm leading-relaxed">
-                Esta aplicación está diseñada para que el equipo de **Popsy Pop** domine la pronunciación y seguridad en la entrevista. 
-                <br><br>
-                1. Selecciona tu perfil o respuesta (A, B, C o Sí/No).<br>
-                2. Usa el ícono de <span class="text-blue-600 font-bold">Volumen</span> para escuchar la pronunciación correcta en inglés.
+                Equipo, atención a estos cambios: El contrato es por <strong>35 horas semanales</strong> y la empresa nos <strong>asiste</strong> con la vivienda (no la provee directamente).
             </p>
         </div>
 
         <!-- Questions Feed -->
         <div id="questions-container" class="space-y-6">
-            <!-- Questions will be injected here by JS -->
+            <!-- Questions injected by JS -->
         </div>
     </main>
 
@@ -99,7 +96,7 @@
             {
                 id: 6,
                 q: "How many hours a week will you work?",
-                a: "According to my contract, I will work 40 hours per week."
+                a: "According to my contract, I will work thirty-five hours per week."
             },
             {
                 id: 7,
@@ -145,7 +142,7 @@
             {
                 id: 13,
                 q: "Where will you be living while you are in the U.S.?",
-                a: "The company is providing housing in New Jersey for the duration of the season."
+                a: "The company is assisting me with housing arrangements in New Jersey for the duration of the season."
             },
             {
                 id: 14,
@@ -193,29 +190,21 @@
         const container = document.getElementById('questions-container');
         const selectedTexts = {};
 
-        // Web Speech API Wrapper
         function speak(text) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'en-US';
-                utterance.rate = 0.8; // Set to a calm, instructional pace
+                utterance.rate = 0.8; 
                 utterance.pitch = 1.0;
-                
-                // Voice selection
                 const voices = window.speechSynthesis.getVoices();
-                // Prefer Google or System English Voices
                 const engVoice = voices.find(v => v.lang === 'en-US' && v.name.includes('Google')) || 
                                  voices.find(v => v.lang === 'en-US');
                 if (engVoice) utterance.voice = engVoice;
-
                 window.speechSynthesis.speak(utterance);
-            } else {
-                console.error("Audio playback not supported in this browser.");
             }
         }
 
-        // Initialize display
         questions.forEach((item, index) => {
             const card = document.createElement('div');
             card.className = 'glass-card p-6 rounded-2xl shadow-sm border-l-4 border-l-blue-600';
@@ -279,7 +268,6 @@
             const text = questions[qIndex].options[optIndex].text;
             textDisplay.innerText = `"${text}"`;
             selectedTexts[qIndex] = text;
-
             const parent = btn.parentElement;
             parent.querySelectorAll('button').forEach(b => b.classList.remove('option-btn-active'));
             btn.classList.add('option-btn-active');
@@ -287,14 +275,10 @@
 
         window.speakSelected = function(qIndex) {
             const text = selectedTexts[qIndex];
-            if (text) {
-                speak(text);
-            } else {
-                alert("Jose Sandoval dice: ¡Primero selecciona una opción antes de escuchar!");
-            }
+            if (text) speak(text);
+            else alert("Jose Sandoval dice: ¡Primero selecciona una opción antes de escuchar!");
         };
 
-        // Preload voices
         window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
     </script>
 </body>
